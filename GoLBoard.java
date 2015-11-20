@@ -29,11 +29,19 @@ public class GoLBoard {
         rows = r;
         columns = c;
         currentGen = new boolean[rows][columns];
+        nextGen = new boolean[rows][columns];
+        reset();
+        toroidal = false;
+    }
+
+    /**
+     * Resets the board to be all "dead" cells.
+     */
+    public void reset() {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) 
-                currentGen[i][j] = false;
+                currentGen[i][j] = nextGen[i][j] = false;
         }
-        toroidal = false;
         generation = 0;
         population = 0;
     }
@@ -42,8 +50,19 @@ public class GoLBoard {
      * Calculates the next generation of the game board.
      */
     public void nextGeneration() {
-        currentGen = nextGen;                   // Set the next gen to the current gen
         nextGen = new boolean[rows][columns];   // Reset the next generation
+
+        /*
+        int sum;
+        if (! toroidal) {                       // Finite board size
+            for (int i = 0; i < rows; i++) {
+                for (int j = 0; j < columns; j++) {
+                    sum = 0;
+                    */
+
+
+
+        
         generation++;
     }
 

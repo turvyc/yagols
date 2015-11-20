@@ -26,8 +26,8 @@ public class GoLFrame extends JFrame {
     private static final int FRAME_WIDTH = 850;
     private static final int FRAME_HEIGHT = 600;
     private static String FRAME_TITLE = "Game of Life Simulator";
-    private static final int CELL_SIZE = 20; // px
-    private static final int GRID_SIZE = 20;
+    private static final int CELL_SIZE = 15; // px
+    private static final int GRID_SIZE = 50;
 
     // Speed slider settings (GPS = Generations Per Second)
     private static final int MIN_GPS = 0;
@@ -72,6 +72,7 @@ public class GoLFrame extends JFrame {
             public void actionPerformed(ActionEvent event) {
                 game.nextGeneration();
                 updateGUI();
+                if (game.getPopulation() == 0) timer.stop();
             }
         }
         ActionListener listener = new TimerListener();

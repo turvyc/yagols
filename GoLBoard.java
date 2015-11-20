@@ -52,17 +52,41 @@ public class GoLBoard {
     public void nextGeneration() {
         nextGen = new int[rows][columns];   // Reset the next generation
 
-        /*
         int sum;
-        if (! toroidal) {                       // Finite board size
+
+        // Finite boards
+        if (! toroidal) {
+            // Check each cell
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < columns; j++) {
                     sum = 0;
-                    */
-
-
-
-        
+                    //Check the surrounding cells
+                    for (int p = i - 1; p <= i + 1; p++) {
+                        if (p < 0 || p >= rows) continue;
+                        for (int q = j - 1; q <= j + 1; q++) {
+                            // Ignore the cell itself
+                            if (p == i && q == j) continue;
+                            if (q < 0 || q >= columns) continue;
+                            sum += currentGen[p][q];
+                        }
+                    }
+                    if (currentGen[i][j] == 0) {
+                        if (sum == 3) {
+                            nextGen[i][j] = 1;
+                            population += 1;
+                        }
+                    }
+                    else {
+                        if (sum < 2 || sum > 3) {
+                            nextGen[i][j] = 0;
+                            population -= 1;
+                        }
+                        else nextGen[i][j] = 1;
+                    }
+                }
+            }
+        }
+        currentGen = nextGen;
         generation++;
     }
 

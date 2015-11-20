@@ -1,12 +1,13 @@
+import java.awt.Point;
+
 /**
  * Represents the board in the Game of Life.
  */
 public class GoLBoard {
 
     // TODO: These should be changeable
-    private static final int ROWS = 100;
-    private static final int COLUMNS = 100;
-    private static final int CELL_SIZE = 10; 
+    private int rows;
+    private int columns;
 
     // The current and next generations of the board
     private boolean[][] currentGen;
@@ -24,10 +25,12 @@ public class GoLBoard {
     /**
      * Creates a new board populated with "dead" cells.
      */
-    public GoLBoard() {
-        currentGen = new boolean[ROWS][COLUMNS];
-        for (int i = 0; i < ROWS; i++) {
-            for (int j = 0; j < COLUMNS; j++) 
+    public GoLBoard(int r, int c) {
+        rows = r;
+        columns = c;
+        currentGen = new boolean[rows][columns];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) 
                 currentGen[i][j] = false;
         }
         toroidal = false;
@@ -37,13 +40,11 @@ public class GoLBoard {
 
     /**
      * Calculates the next generation of the game board.
-     * @return the updated board
      */
-    public boolean[][] nextGeneration() {
+    public void nextGeneration() {
         currentGen = nextGen;                   // Set the next gen to the current gen
-        nextGen = new boolean[ROWS][COLUMNS];   // Reset the next generation
+        nextGen = new boolean[rows][columns];   // Reset the next generation
         generation++;
-        return currentGen;
     }
 
     /**
@@ -51,9 +52,11 @@ public class GoLBoard {
      * @param row The row of the cell
      * @param column The column of the cell
      */
-    public void toggleCell(int row, int column) {
-        assert row >= 0 && row < ROWS;
-        assert column >= 0 && column < COLUMNS;
+    public void toggleCell(Point cell) {
+        int row = (int)cell.getX();
+        int column = (int)cell.getY();
+        assert row >= 0 && row < rows;
+        assert column >= 0 && column < columns;
         if (currentGen[row][column]) {
             population -= 1;
             currentGen[row][column] = false;
@@ -69,6 +72,14 @@ public class GoLBoard {
      */
     public void toggleToroidal() {
         toroidal = (toroidal) ? false : true;
+    }
+
+    /**
+     * Returns the current state of the game.
+     * @return the current generation of the game board
+     */
+    public boolean[][] getCurrentGeneration() {
+        return currentGen;
     }
 
     /**

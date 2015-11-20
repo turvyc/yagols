@@ -28,9 +28,9 @@ import javax.swing.BorderFactory;
 public class GoLFrame extends JFrame {
     // TODO: These should be changeable
     private static final int FRAME_WIDTH = 800;
-    private static final int FRAME_HEIGHT = 500;
+    private static final int FRAME_HEIGHT = 600;
     private static String FRAME_TITLE = "Game of Life Simulator";
-    private static final int CELL_SIZE = 10; // px
+    private static final int CELL_SIZE = 20; // px
     private static final int GRID_SIZE = 20;
 
     // Speed slider settings (GPS = Generations Per Second)
@@ -57,7 +57,7 @@ public class GoLFrame extends JFrame {
     private GoLBoard game;
 
     public GoLFrame() {
-        game = new GoLBoard();
+        game = new GoLBoard(GRID_SIZE, GRID_SIZE);
 
         // Create the GUI
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
@@ -135,7 +135,7 @@ public class GoLFrame extends JFrame {
     private JPanel createBoardPanel() {
         JPanel panel = new JPanel();
         panel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
-        boardComponent = new BoardComponent(CELL_SIZE, GRID_SIZE);
+        boardComponent = new BoardComponent(CELL_SIZE, GRID_SIZE, game);
         int edgeSize = CELL_SIZE * GRID_SIZE + 1;
         boardComponent.setPreferredSize(new Dimension(edgeSize, edgeSize));
 
@@ -145,8 +145,9 @@ public class GoLFrame extends JFrame {
                 int x = event.getX();
                 int y = event.getY();
                 Point cell = getCell(x,y);
-                System.out.printf("%d, %d\n", x, y);
-                System.out.println(cell.toString());
+                game.toggleCell(cell);
+                populationLabel.setText(POPULATION_LABEL_TEXT + game.getPopulation());
+                boardComponent.repaint();
             }
             public void mouseReleased(MouseEvent event) {}
             public void mouseClicked(MouseEvent event) {}

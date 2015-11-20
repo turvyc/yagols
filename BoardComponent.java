@@ -3,6 +3,7 @@ import java.awt.event.ActionListener;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.geom.Line2D;
 import javax.swing.JComponent;
 
@@ -13,14 +14,46 @@ public class BoardComponent extends JComponent {
 
     private int cellSize;
     private int gridSize;
+    private GoLBoard game;
 
-    public BoardComponent (int c, int g) {
-        cellSize = c;
-        gridSize = g;
+    public BoardComponent (int cS, int gS, GoLBoard g) {
+        cellSize = cS;
+        gridSize = gS;
+        game = g;
     }
 
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
+        paintGrid(g2);
+        paintCells(g2);
+    }
+
+    /**
+     * Paints the live cells.
+     * @param g2 the Graphics2D object cast in paintComponent
+     */
+    public void paintCells(Graphics2D g2) {
+        g2.setColor(Color.BLUE);
+        boolean[][] board = game.getCurrentGeneration();
+        Rectangle cell;
+        for (int i = 0; i < gridSize; i++) {
+            for (int j = 0; j < gridSize; j++) {
+                if (board[i][j]) {
+                    cell = new Rectangle(i * cellSize + 1, j * cellSize + 1, 
+                            cellSize - 1, cellSize - 1);
+                    g2.fill(cell);
+                }
+            }
+        }
+    }
+
+
+    /**
+     * Draws the game grid.
+     * @param g2 the Graphics2D object cast in paintComponent
+     */
+    public void paintGrid(Graphics2D g2) {
+        g2.setColor(Color.BLACK);
         // Draw the vertical lines first
         int x1 = 0;
         int y1 = 0;

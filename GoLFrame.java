@@ -3,6 +3,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
@@ -17,6 +18,7 @@ import javax.swing.BorderFactory;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.event.MouseInputAdapter;
 
 /**
  * Defines the layout and event handling for the Game of Life frame.
@@ -221,23 +223,39 @@ public class GoLFrame extends JFrame {
         int edgeSize = CELL_SIZE * GRID_SIZE + 1;
         boardComponent.setPreferredSize(new Dimension(edgeSize, edgeSize));
 
-        // Add mouse click listener
-        class PanelListener implements MouseListener {
+        // Add the mouse listener
+        class PanelListener extends MouseInputAdapter {
+            boolean kill; // Determines whether a drag will kill cells or bring them to life
             public void mousePressed(MouseEvent event) {
-                int x = event.getX();
-                int y = event.getY();
-                Point cell = getCell(x,y);
-                game.toggleCell(cell);
+                Point cell = getCell(event.getX(), event.getY());
+                kill = game.cellAlive(cell);
+                if (kill)
+                    game.killCell(cell);
+                else
+                    game.liveCell(cell);
                 updateGUI();
             }
-            public void mouseReleased(MouseEvent event) {}
-            public void mouseClicked(MouseEvent event) {}
-            public void mouseEntered(MouseEvent event) {}
-            public void mouseExited(MouseEvent event) {}
+            public void mouseReleased(MouseEvent event) {
+                Point cell = getCell(event.getX(), event.getY());
+                if (kill)
+                    game.killCell(cell);
+                else
+                    game.liveCell(cell);
+                updateGUI();
+            }
+            public void mouseDragged(MouseEvent event) {
+                Point cell = getCell(event.getX(), event.getY());
+                if (kill)
+                    game.killCell(cell);
+                else
+                    game.liveCell(cell);
+                updateGUI();
+            }
         }
 
-        MouseListener listener = new PanelListener();
+        PanelListener listener = new PanelListener();
         boardComponent.addMouseListener(listener);
+        boardComponent.addMouseMotionListener(listener);
 
         panel.add(boardComponent);
         return panel;

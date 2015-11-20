@@ -91,23 +91,40 @@ public class GoLBoard {
     }
 
     /**
-     * Toggles the value of a cell.
-     * @param row The row of the cell
-     * @param column The column of the cell
+     * Sets a cell to alive.
+     * @param cell the cell to be brought to life
      */
-    public void toggleCell(Point cell) {
+    public void liveCell(Point cell) {
         int row = (int)cell.getX();
         int column = (int)cell.getY();
-        assert row >= 0 && row < rows;
-        assert column >= 0 && column < columns;
+        if (currentGen[row][column] == 0) {
+            population += 1;
+            currentGen[row][column] = 1;
+        }
+    }
+
+    /**
+     * Sets a cell to dead.
+     * @param cell the cell to be killed
+     */
+    public void killCell(Point cell) {
+        int row = (int)cell.getX();
+        int column = (int)cell.getY();
         if (currentGen[row][column] == 1) {
             population -= 1;
             currentGen[row][column] = 0;
         }
-        else {
-            population += 1;
-            currentGen[row][column] = 1;
-        }
+    }
+
+    /**
+     * Checks whether a cell is alive.
+     * @param cell the cell to check
+     * @return true if it is alive, false if it is dead
+     */
+    public boolean cellAlive(Point cell) {
+        int row = (int)cell.getX();
+        int column = (int)cell.getY();
+        return (currentGen[row][column] == 1);
     }
 
     /**

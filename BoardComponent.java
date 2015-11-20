@@ -34,11 +34,11 @@ public class BoardComponent extends JComponent {
      */
     public void paintCells(Graphics2D g2) {
         g2.setColor(Color.BLUE);
-        boolean[][] board = game.getCurrentGeneration();
+        int[][] board = game.getCurrentGeneration();
         Rectangle cell;
         for (int i = 0; i < gridSize; i++) {
             for (int j = 0; j < gridSize; j++) {
-                if (board[i][j]) {
+                if (board[i][j] == 1) {
                     cell = new Rectangle(i * cellSize + 1, j * cellSize + 1, 
                             cellSize - 1, cellSize - 1);
                     g2.fill(cell);

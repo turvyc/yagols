@@ -10,8 +10,8 @@ public class GoLBoard {
     private int columns;
 
     // The current and next generations of the board
-    private boolean[][] currentGen;
-    private boolean[][] nextGen;
+    private int[][] currentGen;
+    private int[][] nextGen;
 
     // Are the top/bottom and left/right sides stitched together?
     private boolean toroidal;
@@ -28,8 +28,8 @@ public class GoLBoard {
     public GoLBoard(int r, int c) {
         rows = r;
         columns = c;
-        currentGen = new boolean[rows][columns];
-        nextGen = new boolean[rows][columns];
+        currentGen = new int[rows][columns];
+        nextGen = new int[rows][columns];
         reset();
         toroidal = false;
     }
@@ -40,7 +40,7 @@ public class GoLBoard {
     public void reset() {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) 
-                currentGen[i][j] = nextGen[i][j] = false;
+                currentGen[i][j] = nextGen[i][j] = 0;
         }
         generation = 0;
         population = 0;
@@ -50,7 +50,7 @@ public class GoLBoard {
      * Calculates the next generation of the game board.
      */
     public void nextGeneration() {
-        nextGen = new boolean[rows][columns];   // Reset the next generation
+        nextGen = new int[rows][columns];   // Reset the next generation
 
         /*
         int sum;
@@ -76,13 +76,13 @@ public class GoLBoard {
         int column = (int)cell.getY();
         assert row >= 0 && row < rows;
         assert column >= 0 && column < columns;
-        if (currentGen[row][column]) {
+        if (currentGen[row][column] == 1) {
             population -= 1;
-            currentGen[row][column] = false;
+            currentGen[row][column] = 0;
         }
         else {
             population += 1;
-            currentGen[row][column] = true;
+            currentGen[row][column] = 1;
         }
     }
 
@@ -97,7 +97,7 @@ public class GoLBoard {
      * Returns the current state of the game.
      * @return the current generation of the game board
      */
-    public boolean[][] getCurrentGeneration() {
+    public int[][] getCurrentGeneration() {
         return currentGen;
     }
 

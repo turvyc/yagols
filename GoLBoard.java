@@ -54,35 +54,45 @@ public class GoLBoard {
 
         int sum;
 
-        // Finite boards
-        if (! toroidal) {
-            // Check each cell
-            for (int i = 0; i < rows; i++) {
-                for (int j = 0; j < columns; j++) {
-                    sum = 0;
-                    //Check the surrounding cells
-                    for (int p = i - 1; p <= i + 1; p++) {
+        // Check each cell
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                sum = 0;
+                //Check the surrounding cells
+                for (int p = i - 1; p <= i + 1; p++) {
+                    int r = p; // Required to prevent an infinite for-loop
+                    if (! toroidal) {
                         if (p < 0 || p >= rows) continue;
-                        for (int q = j - 1; q <= j + 1; q++) {
-                            // Ignore the cell itself
-                            if (p == i && q == j) continue;
-                            if (q < 0 || q >= columns) continue;
-                            sum += currentGen[p][q];
-                        }
-                    }
-                    if (currentGen[i][j] == 0) {
-                        if (sum == 3) {
-                            nextGen[i][j] = 1;
-                            population += 1;
-                        }
                     }
                     else {
-                        if (sum < 2 || sum > 3) {
-                            nextGen[i][j] = 0;
-                            population -= 1;
-                        }
-                        else nextGen[i][j] = 1;
+                        if (p < 0) r = rows + p;
+                        else if (p >= rows) r -= rows;
                     }
+                    for (int q = j - 1; q <= j + 1; q++) {
+                        if (p == i && q == j) continue; // Ignore the cell itself
+                        int s = q; // Required to prevent an infinite for-loop
+                        if (! toroidal) {
+                            if (q < 0 || q >= columns) continue;
+                        }
+                        else {
+                            if (q < 0) s = columns + q;
+                            else if (q >= columns) s -= columns;
+                        }
+                        sum += currentGen[r][s];
+                    }
+                }
+                if (currentGen[i][j] == 0) {
+                    if (sum == 3) {
+                        nextGen[i][j] = 1;
+                        population += 1;
+                    }
+                }
+                else {
+                    if (sum < 2 || sum > 3) {
+                        nextGen[i][j] = 0;
+                        population -= 1;
+                    }
+                    else nextGen[i][j] = 1;
                 }
             }
         }
@@ -128,10 +138,11 @@ public class GoLBoard {
     }
 
     /**
-     * Toggles whether the board has toroidal borders.
+     * Sets whether the board has toroidal or finite borders.
+     * @param b true sets toroidal borders; false sets finite borders
      */
-    public void toggleToroidal() {
-        toroidal = (toroidal) ? false : true;
+    public void setToroidal(boolean b) {
+        toroidal = b;
     }
 
     /**

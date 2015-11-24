@@ -116,17 +116,14 @@ public class GoLFrame extends JFrame {
 
     private JPanel createToroidalCheckBox() {
         toroidalCheckBox = new JCheckBox(TOROIDAL_TEXT);
-        class ToroidalListener implements MouseListener {
-            public void mousePressed(MouseEvent event) {
-                // Do stuff
+        class ToroidalListener implements ActionListener {
+            public void actionPerformed(ActionEvent e) {
+                game.setToroidal(toroidalCheckBox.isSelected());
+                updateGUI();
             }
-            public void mouseReleased(MouseEvent event) {}
-            public void mouseClicked(MouseEvent event) {}
-            public void mouseEntered(MouseEvent event) {}
-            public void mouseExited(MouseEvent event) {}
         }
-        MouseListener listener = new ToroidalListener();
-        toroidalCheckBox.addMouseListener(listener);
+        ActionListener listener = new ToroidalListener();
+        toroidalCheckBox.addActionListener(listener);
 
         JPanel panel = new JPanel();
         panel.add(toroidalCheckBox);
@@ -168,6 +165,7 @@ public class GoLFrame extends JFrame {
     private JPanel createButtonPanel() {
         // Create the start button
         startButton = new JButton("Start");
+        /*
         class StartListener implements MouseListener {
             public void mousePressed(MouseEvent event) {
                 timer.start();
@@ -177,8 +175,14 @@ public class GoLFrame extends JFrame {
             public void mouseEntered(MouseEvent event) {}
             public void mouseExited(MouseEvent event) {}
         }
-        MouseListener listener = new StartListener();
-        startButton.addMouseListener(listener);
+        */
+        class StartListener implements ActionListener {
+            public void actionPerformed(ActionEvent event) {
+                timer.start();
+            }
+        }
+        ActionListener l = new StartListener();
+        startButton.addActionListener(l);
 
         // Create the stop button
         stopButton = new JButton("Stop");
@@ -191,7 +195,7 @@ public class GoLFrame extends JFrame {
             public void mouseEntered(MouseEvent event) {}
             public void mouseExited(MouseEvent event) {}
         }
-        listener = new stopListener();
+        MouseListener listener = new stopListener();
         stopButton.addMouseListener(listener);
 
         // Create the reset button

@@ -19,6 +19,8 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.event.MouseInputAdapter;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  * Defines the layout and event handling for the Game of Life frame.
@@ -137,24 +139,15 @@ public class GoLFrame extends JFrame {
         speedSlider.setMinorTickSpacing(1);
         speedSlider.setPaintTicks(true);
         speedSlider.setPaintLabels(true);
-        class SpeedListener implements MouseListener {
-            public void mousePressed(MouseEvent event) {
-                timer.stop();
-            }
-            public void mouseReleased(MouseEvent event) {
-                if (speedSlider.getValue() == 0)
-                    timer.stop();
-                else {
+
+        class SpeedListener implements ChangeListener {
+            public void stateChanged(ChangeEvent event) {
+                if (speedSlider.getValue() >= 0)
                     timer.setDelay(1000 / speedSlider.getValue());
-                    timer.start();
-                }
             }
-            public void mouseClicked(MouseEvent event) {}
-            public void mouseEntered(MouseEvent event) {}
-            public void mouseExited(MouseEvent event) {}
         }
-        MouseListener listener = new SpeedListener();
-        speedSlider.addMouseListener(listener);
+        ChangeListener listener = new SpeedListener();
+        speedSlider.addChangeListener(listener);
 
         JPanel panel = new JPanel();
         panel.add(speedSlider);
@@ -165,53 +158,34 @@ public class GoLFrame extends JFrame {
     private JPanel createButtonPanel() {
         // Create the start button
         startButton = new JButton("Start");
-        /*
-        class StartListener implements MouseListener {
-            public void mousePressed(MouseEvent event) {
-                timer.start();
-            }
-            public void mouseReleased(MouseEvent event) {}
-            public void mouseClicked(MouseEvent event) {}
-            public void mouseEntered(MouseEvent event) {}
-            public void mouseExited(MouseEvent event) {}
-        }
-        */
         class StartListener implements ActionListener {
             public void actionPerformed(ActionEvent event) {
                 timer.start();
             }
         }
-        ActionListener l = new StartListener();
-        startButton.addActionListener(l);
+        ActionListener listener = new StartListener();
+        startButton.addActionListener(listener);
 
         // Create the stop button
         stopButton = new JButton("Stop");
-        class stopListener implements MouseListener {
-            public void mousePressed(MouseEvent event) {
+        class StopListener implements ActionListener {
+            public void actionPerformed(ActionEvent event) {
                 timer.stop();
             }
-            public void mouseReleased(MouseEvent event) {}
-            public void mouseClicked(MouseEvent event) {}
-            public void mouseEntered(MouseEvent event) {}
-            public void mouseExited(MouseEvent event) {}
         }
-        MouseListener listener = new stopListener();
-        stopButton.addMouseListener(listener);
+        listener = new StopListener();
+        stopButton.addActionListener(listener);
 
         // Create the reset button
         resetButton = new JButton("Reset");
-        class ResetListener implements MouseListener {
-            public void mousePressed(MouseEvent event) {
+        class ResetListener implements ActionListener {
+            public void actionPerformed(ActionEvent event) {
                 game.reset();
                 updateGUI();
             }
-            public void mouseReleased(MouseEvent event) {}
-            public void mouseClicked(MouseEvent event) {}
-            public void mouseEntered(MouseEvent event) {}
-            public void mouseExited(MouseEvent event) {}
         }
         listener = new ResetListener();
-        resetButton.addMouseListener(listener);
+        resetButton.addActionListener(listener);
 
         JPanel panel = new JPanel();
         panel.add(startButton);

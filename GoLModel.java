@@ -1,9 +1,9 @@
 import java.awt.Point;
 
 /**
- * Represents the board in the Game of Life.
+ * An abstract representation of the Game of Life.
  */
-public class GoLBoard {
+public class GoLModel {
 
     // TODO: These should be changeable
     private int rows;
@@ -25,7 +25,7 @@ public class GoLBoard {
     /**
      * Creates a new board populated with "dead" cells.
      */
-    public GoLBoard(int r, int c) {
+    public GoLModel(int r, int c) {
         rows = r;
         columns = c;
         currentGen = new int[rows][columns];

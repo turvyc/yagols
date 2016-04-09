@@ -28,15 +28,15 @@ import javax.swing.event.ChangeListener;
 public class GoLFrame extends JFrame {
     // TODO: These should be changeable
     private static final int FRAME_WIDTH = 850;
-    private static final int FRAME_HEIGHT = 600;
-    private static String FRAME_TITLE = "Game of Life Simulator";
+    private static final int FRAME_HEIGHT = 900;
+    private static String FRAME_TITLE = "Yet Another Game of Life Simulator";
     private static final int CELL_SIZE = 15; // px
     private static final int GRID_SIZE = 50;
 
     // Speed slider settings (GPS = Generations Per Second)
-    private static final int MIN_GPS = 0;
-    private static final int MAX_GPS = 20;
-    private static final int INIT_GPS = 1;
+    private static final int MIN_GPS = 10;
+    private static final int MAX_GPS = 40;
+    private static final int INIT_GPS = 25;
 
     // GUI Components that require listeners
     private JLabel generationLabel;
@@ -58,6 +58,7 @@ public class GoLFrame extends JFrame {
     private GoLBoard game;
 
     public GoLFrame() {
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         game = new GoLBoard(GRID_SIZE, GRID_SIZE);
 
         // Create the GUI
@@ -204,6 +205,7 @@ public class GoLFrame extends JFrame {
         // Add the mouse listener
         class PanelListener extends MouseInputAdapter {
             boolean kill; // Determines whether a drag will kill cells or bring them to life
+
             public void mousePressed(MouseEvent event) {
                 Point cell = getCell(event.getX(), event.getY());
                 kill = game.cellAlive(cell);
@@ -213,6 +215,7 @@ public class GoLFrame extends JFrame {
                     game.liveCell(cell);
                 updateGUI();
             }
+            
             public void mouseReleased(MouseEvent event) {
                 Point cell = getCell(event.getX(), event.getY());
                 if (kill)
@@ -221,6 +224,7 @@ public class GoLFrame extends JFrame {
                     game.liveCell(cell);
                 updateGUI();
             }
+
             public void mouseDragged(MouseEvent event) {
                 Point cell = getCell(event.getX(), event.getY());
                 if (kill)
